@@ -1,0 +1,119 @@
+@model JobApp.Models.JobDetails
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Job</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Company)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Company)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salary)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salary)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.JobType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.JobType)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PostedDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PostedDate)
+        </dd>
+
+        <dt class = "col-sm-2">
+            Employer
+        </dt>
+        <dd class = "col-sm-10">
+            @(Model.Employer?.CompanyName ?? "N/A")
+        </dd>
+    </dl>
+</div>
+
+
+<h4>Applicants:</h4>
+
+@if (Model.Employees != null && Model.Employees.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var e in Model.Employees)
+        {
+            <tr>
+                <td>@(e.FirstName + " " + e.LastName)</td>
+                <td>@e.Email</td>
+                <td>@e.PhoneNumber</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No applicants yet.</p>
+}
+
+
+@if (User.Identity!.IsAuthenticated && User.IsInRole("Employee"))
+{
+    <form asp-controller="AppliedJobs" asp-action="Apply" asp-route-id="@Model.Id" method="post">
+        <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+    </form>
+}
+
+
+<div>
+    @if (User.IsInRole("Admin"))
+    {
+        <text>
+            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+            <a asp-action="Delete" asp-route-id="@Model?.Id">Delete</a> |
+        </text>
+    }
+    <a asp-action="Index">Back to List</a>
+</div>

@@ -1,0 +1,40 @@
+@model IEnumerable<JobApp.Models.JobDetails>
+
+@{
+    ViewData["Title"] = "Başvurduğum İşler";
+}
+
+<h1>APPLIED JOBS</h1>
+
+@if (!Model.Any())
+{
+    <p>NO APPLICATIONS.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Başlık</th>
+                <th>Şirket</th>
+                <th>Lokasyon</th>
+                <th>İş Tipi</th>
+                <th>İlan Tarihi</th>
+                <th>Detay</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Title</td>
+                <td>@job.Company</td>
+                <td>@job.Location</td>
+                <td>@job.JobType</td>
+                <td>@job.PostedDate.ToShortDateString()</td>
+                <td><a asp-controller="JobPost" asp-action="Details" asp-route-id="@job.Id">Detay</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
